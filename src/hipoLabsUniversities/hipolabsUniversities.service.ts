@@ -4,7 +4,7 @@ import { HttpService } from '@nestjs/axios';
 import { UniversitySearchResponse } from './types/UniversitySearchResponse';
 
 @Injectable()
-export class UniversitiesService {
+export class HipolabsUniversitiesService {
   constructor(private readonly httpService: HttpService) {}
 
   getTurkishUniversities() {

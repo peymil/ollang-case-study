@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UniversitiesService } from './universities.service';
+import { HipolabsUniversitiesService } from './hipolabsUniversities.service';
 import { HttpModule } from "@nestjs/axios";
 
 @Module({
@@ -9,7 +9,7 @@ import { HttpModule } from "@nestjs/axios";
       baseURL: 'http://universities.hipolabs.com/',
     }),
   ],
-  providers: [UniversitiesService],
-  exports: [UniversitiesService]
+  providers: [HipolabsUniversitiesService],
+  exports: [HipolabsUniversitiesService]
 })
-export class UniversitiesModule {}
+export class HipolabsUniversitiesModule {}
