@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UniversitiesService } from './universities.service';
+import { HipolabsUniversitiesService } from './hipolabsUniversities.service';
 import { HttpModule } from '@nestjs/axios';
 
 describe('UniversitiesService', () => {
-  let service: UniversitiesService;
+  let service: HipolabsUniversitiesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -13,16 +13,16 @@ describe('UniversitiesService', () => {
           baseURL: 'http://universities.hipolabs.com/',
         }),
       ],
-      providers: [UniversitiesService],
+      providers: [HipolabsUniversitiesService],
     }).compile();
 
-    service = module.get<UniversitiesService>(UniversitiesService);
+    service = module.get<HipolabsUniversitiesService>(HipolabsUniversitiesService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-  it('should return list of universities', async () => {
+  it('should return list of hipolabsUniversities', async () => {
     const universities = await service.getTurkishUniversities();
     expect(universities.length).toBeGreaterThan(0);
   });
