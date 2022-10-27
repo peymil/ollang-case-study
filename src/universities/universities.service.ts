@@ -28,10 +28,12 @@ export class UniversitiesService {
   }
 
   async getRealUniversitiesFromAPI(): Promise<University[]> {
-    const universities = await this.hipolabsUniversitiesService.getTurkishUniversities();
-    return universities.map((university) => {
+    const universities =
+      await this.hipolabsUniversitiesService.getTurkishUniversities();
+    return universities.map((university, n) => {
       const universityToInsert = new University();
       universityToInsert.name = university.name;
+      universityToInsert.placement = n;
       return universityToInsert;
     });
   }

@@ -8,6 +8,9 @@ export class University {
   @Prop()
   name: string;
 
+  @Prop()
+  placement: number;
+
   @Prop({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Student',
