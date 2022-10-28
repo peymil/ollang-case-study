@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { RandomUserService } from '../random-user/random-user.service';
 import { InjectModel } from '@nestjs/mongoose';
-import { Student } from "./schemas/student.schema";
-import { Model } from 'mongoose';
+import { Student, StudentDocument } from './schemas/student.schema';
+import { Model, Query } from 'mongoose';
+import { UniversitiesService } from '../universities/universities.service';
+import { University } from '../universities/schemas/university.schema';
+import { DeleteResult } from 'mongodb';
 
 @Injectable()
 export class StudentsService {
@@ -22,19 +25,25 @@ export class StudentsService {
     });
   }
 
-  deleteStudents() {
+  assignStudentToUniversity(studentId: string, university: University) {
+    return this.studentModel.findByIdAndUpdate(studentId, {
+      university: university,
+    });
+  }
+
+  deleteStudents(): Query<DeleteResult, StudentDocument> {
     return this.studentModel.deleteMany({});
   }
 
-  async getStudents() {
+  async getStudents(): Promise<StudentDocument[]> {
     return this.studentModel.find();
   }
 
-  async getStudentById(id: string) {
+  async getStudentById(id: string): Promise<StudentDocument> {
     return this.studentModel.findById(id);
   }
 
-  addStudents(Student: Student[]) {
+  addStudents(Student: Student[]): Promise<StudentDocument[]> {
     return this.studentModel.insertMany(Student);
   }
 }

@@ -38,6 +38,10 @@ export class UniversitiesService {
     });
   }
 
+  async getUniversityByPlacement(placement: number) {
+    return this.universityModel.findOne({ placement: placement });
+  }
+
   async addUniversities(universities: University[]) {
     return this.universityModel.insertMany(universities);
   }

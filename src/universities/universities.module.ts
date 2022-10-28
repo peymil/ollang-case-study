@@ -12,6 +12,7 @@ import { University, UniversitySchema } from './schemas/university.schema';
       { name: University.name, schema: UniversitySchema },
     ]),
   ],
+  exports: [UniversitiesService],
   controllers: [UniversitiesController],
   providers: [UniversitiesService],
 })
