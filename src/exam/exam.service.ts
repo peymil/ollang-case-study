@@ -69,9 +69,10 @@ export class ExamService {
     return studentsWithScores.sort((a, b) => b.examScore - a.examScore);
   }
 
-  async startExamAndPlaceStudents(): Promise<StudentDocument[]> {
-    const articles =
-      await this.wikipediaService.getMostViewedArticlesOfTheDate();
+  async startExamAndPlaceStudents(examDate: Date): Promise<StudentDocument[]> {
+    const articles = await this.wikipediaService.getMostViewedArticlesOfTheDate(
+      examDate,
+    );
 
     const students = await this.studentsService.getStudents();
 

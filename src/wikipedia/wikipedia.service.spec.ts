@@ -22,11 +22,11 @@ describe('WikipediaService', () => {
     expect(service).toBeDefined();
   });
   it('should return most viewed article of the date', async () => {
-    const articles = await service.getMostViewedArticlesOfTheDate();
+    const articles = await service.getMostViewedArticlesOfTheDate(new Date());
     expect(articles.length).toBeGreaterThan(0);
   });
   it('should return name of the article', async () => {
-    const articles = await service.getMostViewedArticlesOfTheDate();
+    const articles = await service.getMostViewedArticlesOfTheDate(new Date());
     expect(articles[0].article).toBeDefined();
   });
 });
