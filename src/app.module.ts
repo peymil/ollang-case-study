@@ -14,7 +14,6 @@ import RootConfig from './config/root.config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        console.log('uri', config.get('mongoose.uri'));
         return config.get('mongoose');
       },
     }),

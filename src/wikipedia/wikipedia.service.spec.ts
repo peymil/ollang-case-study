@@ -23,10 +23,12 @@ describe('WikipediaService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
   it('should return most viewed article of the date', async () => {
     const articles = await service.getMostViewedArticlesOfTheDate(yesterday);
     expect(articles.length).toBeGreaterThan(0);
   });
+
   it('should return name of the article', async () => {
     const articles = await service.getMostViewedArticlesOfTheDate(yesterday);
     expect(articles[0].article).toBeDefined();
