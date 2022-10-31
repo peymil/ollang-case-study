@@ -1,8 +1,6 @@
 name: Nest.js Jest CI
 
 on:
-  push:
-    branches: [master]
   pull_request:
     types: [opened, reopened, synchronize]
     branches: [master]
