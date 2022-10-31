@@ -27,10 +27,15 @@ export class UniversitiesService {
       .then((u) => u.students);
   }
 
-  async getRealUniversitiesFromAPI(): Promise<University[]> {
+  async getRealUniversitiesFromAPIAndSort(): Promise<University[]> {
     const universities =
       await this.hipolabsUniversitiesService.getTurkishUniversities();
-    return universities.map((university, n) => {
+    const sortedUniversities = universities.sort(
+      (a, b) =>
+        a.name.split('')[0].toLowerCase().charCodeAt(0) -
+        b.name.split('')[0].toLowerCase().charCodeAt(0),
+    );
+    return sortedUniversities.map((university, n) => {
       const universityToInsert = new University();
       universityToInsert.name = university.name;
       universityToInsert.placement = n;

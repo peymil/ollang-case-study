@@ -22,7 +22,7 @@ export class UniversitiesController {
 
   @Post()
   async createUniversities() {
-    const universities = await this.universitiesService.getRealUniversitiesFromAPI()
+    const universities = await this.universitiesService.getRealUniversitiesFromAPIAndSort()
     await this.universitiesService.addUniversities(universities)
   }
 }
