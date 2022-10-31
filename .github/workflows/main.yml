@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
+        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
 
     steps:
       - uses: actions/checkout@v3
@@ -21,8 +22,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-db: db
       - run: yarn install --frozen-lockfile
       - run: yarn prebuild
-      - run: NODE_ENV=development yarn lint
-      - run: NODE_ENV=development yarn build
-      - run: NODE_ENV=development yarn test
+      - run: yarn lint
+      - run: yarn build
+      - run: yarn test
+      - run: yarn test:e2e
