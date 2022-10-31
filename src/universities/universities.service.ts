@@ -45,12 +45,14 @@ export class UniversitiesService {
     return sortedUniversities.map((university, n) => {
       const universityToInsert = new University();
       universityToInsert.name = university.name;
-      universityToInsert.placement = n;
+      universityToInsert.placement = n + 1;
       return universityToInsert;
     });
   }
 
-  async getUniversityByPlacement(placement: number): Promise<UniversityDocument> {
+  async getUniversityByPlacement(
+    placement: number,
+  ): Promise<UniversityDocument> {
     return this.universityModel.findOne({ placement: placement });
   }
 
