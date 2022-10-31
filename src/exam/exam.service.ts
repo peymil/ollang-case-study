@@ -39,19 +39,28 @@ export class ExamService {
   async placeStudents(
     studentsWithScores: StudentWithExamScore[],
   ): Promise<StudentDocument[]> {
-    return Promise.all(
-      studentsWithScores.map(async (student, index) => {
-        // Quota of the university is 5
-        const university =
-          await this.universitiesService.getUniversityByPlacement(
-            Math.floor(index / 5) + 1,
-          );
-        return this.studentsService.assignStudentToUniversity(
-          student.id,
-          university,
+    const universitiesPromiseQueue = [];
+    const studentsPromiseQueue = [];
+    let i = 0;
+    for (const student of studentsWithScores) {
+      const university =
+        await this.universitiesService.getUniversityByPlacement(
+          Math.floor(i / 5) + 1,
         );
-      }),
-    );
+      if (!university) break;
+      universitiesPromiseQueue.push(
+        this.universitiesService.assignStudentToUniversity(
+          university._id,
+          student,
+        ),
+      );
+      studentsPromiseQueue.push(
+        this.studentsService.assignUniversityToStudent(student._id, university),
+      );
+      i++;
+    }
+    await Promise.all(universitiesPromiseQueue);
+    return Promise.all(studentsPromiseQueue);
   }
 
   calculateScoreOfStudentsAndSort(

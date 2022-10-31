@@ -8,12 +8,10 @@ import { StudentsModule } from '../src/students/students.module';
 import { ExamModule } from '../src/exam/exam.module';
 import RootConfig from '../src/config/root.config';
 import * as supertest from 'supertest';
-import {
-  StudentDocument,
-} from '../src/students/schemas/student.schema';
+import { StudentDocument } from '../src/students/schemas/student.schema';
 import { UniversityDocument } from '../src/universities/schemas/university.schema';
 
-describe('Cats', () => {
+describe('Exam', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -50,7 +48,6 @@ describe('Cats', () => {
     const students: StudentDocument[] = (
       await supertest(app.getHttpServer()).get('/students')
     ).body;
-    console.log(students[0]._id);
     return supertest(app.getHttpServer())
       .get('/students/' + students[0]._id)
       .expect(200);
@@ -58,10 +55,6 @@ describe('Cats', () => {
 
   it(`/POST universities`, () => {
     return supertest(app.getHttpServer()).post('/universities').expect(201);
-  });
-
-  it(`/GET universities`, () => {
-    return supertest(app.getHttpServer()).get('/universities').expect(200);
   });
 
   it(`/GET universities`, () => {
@@ -76,20 +69,30 @@ describe('Cats', () => {
       .get('/startExam')
       .query({ examDate: yesterdayISODate })
       .expect(200);
-  });
+  }, 10000);
 
   it(`/GET universities/:id/students`, async () => {
     const universities: UniversityDocument[] = (
-      await supertest(app.getHttpServer()).get('/students')
+      await supertest(app.getHttpServer()).get('/universities')
     ).body;
     const firstUniversityIndex = universities.findIndex(
       (university) => university.placement === 1,
     );
     return supertest(app.getHttpServer())
       .get(
-        '/universities/' + universities[firstUniversityIndex]._id + '/studnets',
+        '/universities/' +
+          universities[firstUniversityIndex]._id +
+          '/students',
       )
       .expect(200);
+  });
+
+  it(`/DELETE universities`, () => {
+    return supertest(app.getHttpServer()).delete('/universities').expect(200);
+  });
+
+  it(`/DELETE students`, () => {
+    return supertest(app.getHttpServer()).delete('/students').expect(200);
   });
 
   afterAll(async () => {

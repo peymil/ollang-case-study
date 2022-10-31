@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { University } from './schemas/university.schema';
+import { University, UniversityDocument } from './schemas/university.schema';
 import { HipolabsUniversitiesService } from '../hipoLabsUniversities/hipolabsUniversities.service';
+import { StudentDocument } from '../students/schemas/student.schema';
 
 @Injectable()
 export class UniversitiesService {
@@ -27,6 +28,12 @@ export class UniversitiesService {
       .then((u) => u.students);
   }
 
+  assignStudentToUniversity(universityId: string, student: StudentDocument) {
+    return this.universityModel.findByIdAndUpdate(universityId, {
+      $push: { students: student },
+    });
+  }
+
   async getRealUniversitiesFromAPIAndSort(): Promise<University[]> {
     const universities =
       await this.hipolabsUniversitiesService.getTurkishUniversities();
@@ -43,7 +50,7 @@ export class UniversitiesService {
     });
   }
 
-  async getUniversityByPlacement(placement: number) {
+  async getUniversityByPlacement(placement: number): Promise<UniversityDocument> {
     return this.universityModel.findOne({ placement: placement });
   }
 

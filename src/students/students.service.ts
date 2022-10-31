@@ -3,7 +3,6 @@ import { RandomUserService } from '../random-user/random-user.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Student, StudentDocument } from './schemas/student.schema';
 import { Model, Query } from 'mongoose';
-import { UniversitiesService } from '../universities/universities.service';
 import { University } from '../universities/schemas/university.schema';
 import { DeleteResult } from 'mongodb';
 
@@ -25,7 +24,7 @@ export class StudentsService {
     });
   }
 
-  assignStudentToUniversity(studentId: string, university: University) {
+  assignUniversityToStudent(studentId: string, university: University) {
     return this.studentModel.findByIdAndUpdate(studentId, {
       university: university,
     });
