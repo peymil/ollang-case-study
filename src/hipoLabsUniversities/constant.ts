@@ -1,0 +1,1 @@
+export const hipolabUniversitiesApiUrl = 'http://universities.hipolabs.com/';

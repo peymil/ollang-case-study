@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RandomUserService } from './random-user.service';
 import { HttpModule } from '@nestjs/axios';
+import {  randomUserApiUrl } from "./constant";
 
 describe('RandomUserService', () => {
   let service: RandomUserService;
@@ -9,7 +10,7 @@ describe('RandomUserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         HttpModule.register({
-          baseURL: 'https://randomuser.me/api/',
+          baseURL: randomUserApiUrl,
         }),
       ],
       providers: [RandomUserService],

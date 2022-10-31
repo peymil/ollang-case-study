@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HipolabsUniversitiesService } from './hipolabsUniversities.service';
 import { HttpModule } from '@nestjs/axios';
+import { hipolabUniversitiesApiUrl } from "./constant";
 
 describe('UniversitiesService', () => {
   let service: HipolabsUniversitiesService;
@@ -10,7 +11,7 @@ describe('UniversitiesService', () => {
       imports: [
         HttpModule.register({
           //Hipolabs not supporting https
-          baseURL: 'http://universities.hipolabs.com/',
+          baseURL: hipolabUniversitiesApiUrl,
         }),
       ],
       providers: [HipolabsUniversitiesService],

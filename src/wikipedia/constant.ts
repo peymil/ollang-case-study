@@ -1,0 +1,1 @@
+export const wikimediaApiUrl = 'https://wikimedia.org/api/rest_v1';
