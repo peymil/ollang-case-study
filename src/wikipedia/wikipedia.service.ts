@@ -8,11 +8,6 @@ export class WikipediaService {
   constructor(private readonly httpService: HttpService) {}
 
   getMostViewedArticlesOfTheDate(date: Date) {
-    console.log(
-      `/metrics/pageviews/top/tr.wikipedia/all-access/${date.getFullYear()}/${
-        date.getMonth() + 1
-      }/${date.getDate()}`,
-    );
     return lastValueFrom(
       this.httpService
         .get<PageViewMetricResponse>(

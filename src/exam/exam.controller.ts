@@ -19,11 +19,11 @@ export class ExamController {
   @Get('startExam')
   @ApiResponse({ status: 200, description: 'Exam finished successfully' })
   @UsePipes(new ValidationPipe({ transform: true }))
-  startExam(@Query() examDate: StartExamDto) {
+  async startExam(@Query() examDate: StartExamDto) {
     const date = new Date(examDate.examDate);
     if (date.toString() === 'Invalid Date') {
       throw new InvalidDateException();
     }
-    this.examService.startExamAndPlaceStudents(date);
+    await this.examService.startExamAndPlaceStudents(date);
   }
 }
