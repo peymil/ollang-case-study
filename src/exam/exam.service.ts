@@ -82,6 +82,10 @@ export class ExamService {
     const articles = await this.wikipediaService.getMostViewedArticlesOfTheDate(
       examDate,
     );
+    await Promise.all([
+      this.universitiesService.removeStudentFromAllUniversities(),
+      this.studentsService.removeUniversityFromAllStudents(),
+    ]);
 
     const students = await this.studentsService.getStudents();
 

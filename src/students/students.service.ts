@@ -24,6 +24,17 @@ export class StudentsService {
     });
   }
 
+  async removeUniversityFromAllStudents() {
+    return this.studentModel.updateMany(
+      {},
+      {
+        $set: {
+          university: undefined,
+        },
+      },
+    );
+  }
+
   assignUniversityToStudent(studentId: string, university: University) {
     return this.studentModel.findByIdAndUpdate(studentId, {
       university: university,

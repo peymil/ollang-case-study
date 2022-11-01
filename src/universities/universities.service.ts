@@ -34,6 +34,17 @@ export class UniversitiesService {
     });
   }
 
+  async removeStudentFromAllUniversities() {
+    return this.universityModel.updateMany(
+      {},
+      {
+        $set: {
+          students: [],
+        },
+      },
+    );
+  }
+
   async getRealUniversitiesFromAPIAndSort(): Promise<University[]> {
     const universities =
       await this.hipolabsUniversitiesService.getTurkishUniversities();

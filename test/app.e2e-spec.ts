@@ -76,10 +76,17 @@ describe('Exam', () => {
     const yesterdayISODate = new Date(+new Date() - 1000 * 60 * 60 * 24)
       .toISOString()
       .split('T')[0];
+    // call startexam twice beacuse we need to check if students inserted twice to the university
     await supertest(server)
       .get('/startExam')
       .query({ examDate: yesterdayISODate })
       .expect(200);
+
+    await supertest(server)
+      .get('/startExam')
+      .query({ examDate: yesterdayISODate })
+      .expect(200);
+
     const universities: UniversityDocument[] = (
       await supertest(server).get('/universities')
     ).body;
