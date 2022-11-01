@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+  node:
+    restart: always
+    build: .
+    command:
+      - yarn
+      - test
+    ports:
+      - 3000:3000
