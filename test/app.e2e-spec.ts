@@ -96,7 +96,7 @@ describe('Exam', () => {
     );
     const firstUniversity = universities[firstUniversityIndex];
     expect(firstUniversity.students).toHaveLength(5);
-  }, 10000);
+  }, 30000);
 
   it(`/GET universities/:id/students`, async () => {
     const universities: UniversityDocument[] = (
