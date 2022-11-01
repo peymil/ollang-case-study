@@ -35,10 +35,13 @@ export class StudentsService {
     );
   }
 
-  assignUniversityToStudent(studentId: string, university: University) {
-    return this.studentModel.findByIdAndUpdate(studentId, {
-      university: university,
-    });
+  assignUniversityToStudents(studentIds: string[], university: University) {
+    return this.studentModel.updateMany(
+      { _id: { $in: studentIds } },
+      {
+        university: university,
+      },
+    );
   }
 
   deleteStudents(): Query<DeleteResult, StudentDocument> {

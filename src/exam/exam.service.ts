@@ -41,24 +41,27 @@ export class ExamService {
   ): Promise<StudentDocument[]> {
     const universitiesPromiseQueue = [];
     const studentsPromiseQueue = [];
-    let i = 0;
-    for (const student of studentsWithScores) {
+    for (let j = 0; j < studentsWithScores.length; j += 5) {
       const university =
         await this.universitiesService.getUniversityByPlacement(
-          Math.floor(i / 5) + 1,
+          Math.floor(j / 5) + 1,
         );
       if (!university) break;
-      universitiesPromiseQueue.push(
-        this.universitiesService.assignStudentToUniversity(
-          university._id,
-          student,
+      const students = studentsWithScores.slice(j, j + 5);
+      studentsPromiseQueue.push(
+        this.studentsService.assignUniversityToStudents(
+          students.map(({ _id }) => _id),
+          university,
         ),
       );
-      studentsPromiseQueue.push(
-        this.studentsService.assignUniversityToStudent(student._id, university),
+      universitiesPromiseQueue.push(
+        this.universitiesService.assignStudentsToUniversity(
+          university._id,
+          students,
+        ),
       );
-      i++;
     }
+
     await Promise.all(universitiesPromiseQueue);
     return Promise.all(studentsPromiseQueue);
   }

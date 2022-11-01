@@ -28,9 +28,9 @@ export class UniversitiesService {
       .then((u) => u.students);
   }
 
-  assignStudentToUniversity(universityId: string, student: StudentDocument) {
+  assignStudentsToUniversity(universityId: string, students: StudentDocument[]) {
     return this.universityModel.findByIdAndUpdate(universityId, {
-      $push: { students: student },
+      students: students,
     });
   }
 
