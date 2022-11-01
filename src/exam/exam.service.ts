@@ -66,6 +66,14 @@ export class ExamService {
     return Promise.all(studentsPromiseQueue);
   }
 
+  getStudents() {
+    return this.studentsService.getStudents();
+  }
+
+  getArticlesOfDate(examDate: Date) {
+    return this.wikipediaService.getMostViewedArticlesOfTheDate(examDate);
+  }
+
   calculateScoreOfStudentsAndSort(
     students: StudentDocument[],
     articles: PageViewMetricItemArticles[],
@@ -81,22 +89,10 @@ export class ExamService {
     return studentsWithScores.sort((a, b) => b.examScore - a.examScore);
   }
 
-  async startExamAndPlaceStudents(examDate: Date): Promise<StudentDocument[]> {
-    const articles = await this.wikipediaService.getMostViewedArticlesOfTheDate(
-      examDate,
-    );
-    await Promise.all([
+  removePreviousAssignment() {
+    return Promise.all([
       this.universitiesService.removeStudentFromAllUniversities(),
       this.studentsService.removeUniversityFromAllStudents(),
     ]);
-
-    const students = await this.studentsService.getStudents();
-
-    const sortedStudentsWithScores = this.calculateScoreOfStudentsAndSort(
-      students,
-      articles,
-    );
-
-    return this.placeStudents(sortedStudentsWithScores);
   }
 }
