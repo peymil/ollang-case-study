@@ -13,7 +13,7 @@ import { UniversityDocument } from '../src/universities/schemas/university.schem
 
 describe('Exam', () => {
   let app: INestApplication;
-
+  let server: any;
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -34,65 +34,94 @@ describe('Exam', () => {
     app = moduleRef.createNestApplication();
 
     await app.init();
+    server = app.getHttpServer();
   });
 
   it(`/POST students`, () => {
-    return supertest(app.getHttpServer()).post('/students').expect(201);
+    return supertest(server).post('/students').expect(201);
   });
 
   it(`/GET students`, () => {
-    return supertest(app.getHttpServer()).get('/students').expect(200);
+    return supertest(server)
+      .get('/students')
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toHaveLength(1000);
+      });
   });
 
   it(`/GET students/:id`, async () => {
     const students: StudentDocument[] = (
-      await supertest(app.getHttpServer()).get('/students')
+      await supertest(server).get('/students')
     ).body;
-    return supertest(app.getHttpServer())
+    return supertest(server)
       .get('/students/' + students[0]._id)
       .expect(200);
   });
 
   it(`/POST universities`, () => {
-    return supertest(app.getHttpServer()).post('/universities').expect(201);
+    return supertest(server).post('/universities').expect(201);
   });
 
   it(`/GET universities`, () => {
-    return supertest(app.getHttpServer()).get('/universities').expect(200);
+    return supertest(server)
+      .get('/universities')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.length).toBeGreaterThan(0);
+      });
   });
 
-  it(`/GET startExam`, () => {
+  it(`/GET startExam`, async () => {
     const yesterdayISODate = new Date(+new Date() - 1000 * 60 * 60 * 24)
       .toISOString()
       .split('T')[0];
-    return supertest(app.getHttpServer())
+    await supertest(server)
       .get('/startExam')
       .query({ examDate: yesterdayISODate })
       .expect(200);
+    const universities: UniversityDocument[] = (
+      await supertest(server).get('/universities')
+    ).body;
+
+    const firstUniversityIndex = universities.findIndex(
+      ({ placement }) => placement === 1,
+    );
+    const firstUniversity = universities[firstUniversityIndex];
+    expect(firstUniversity.students).toHaveLength(5);
   }, 10000);
 
   it(`/GET universities/:id/students`, async () => {
     const universities: UniversityDocument[] = (
-      await supertest(app.getHttpServer()).get('/universities')
+      await supertest(server).get('/universities')
     ).body;
     const firstUniversityIndex = universities.findIndex(
       (university) => university.placement === 1,
     );
-    return supertest(app.getHttpServer())
+    return supertest(server)
       .get(
-        '/universities/' +
-          universities[firstUniversityIndex]._id +
-          '/students',
+        '/universities/' + universities[firstUniversityIndex]._id + '/students',
       )
-      .expect(200);
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toHaveLength(5);
+      });
   });
 
-  it(`/DELETE universities`, () => {
-    return supertest(app.getHttpServer()).delete('/universities').expect(200);
+  it(`/DELETE universities`, async () => {
+    await supertest(server).delete('/universities').expect(200);
+    const universities: UniversityDocument[] = (
+      await supertest(server).get('/universities')
+    ).body;
+    expect(universities).toHaveLength(0);
   });
 
-  it(`/DELETE students`, () => {
-    return supertest(app.getHttpServer()).delete('/students').expect(200);
+  it(`/DELETE students`, async () => {
+    await supertest(server).delete('/students').expect(200);
+    const students: StudentDocument[] = (
+      await supertest(server).get('/students')
+    ).body;
+    expect(students).toHaveLength(0);
   });
 
   afterAll(async () => {

@@ -1,23 +1,29 @@
-import { Controller, Get, Query, UsePipes, ValidationPipe } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Query,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ExamService } from './exam.service';
-import { StudentDocument } from '../students/schemas/student.schema';
-import { InvalidDateException } from "./exceptions/invalidDate.exception";
-import { StartExamDto } from "./dtos/startExam.dto";
+import { InvalidDateException } from './exceptions/invalidDate.exception';
+import { StartExamDto } from './dtos/startExam.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Exam')
 @Controller('/')
 export class ExamController {
   constructor(private readonly examService: ExamService) {}
 
-  // YYYY-MM-DD
+  @ApiOperation({ description: 'Start exam at the specific date' })
   @Get('startExam')
+  @ApiResponse({ status: 200, description: 'Exam finished successfully' })
   @UsePipes(new ValidationPipe({ transform: true }))
-  startExam(
-    @Query() examDate: StartExamDto,
-  ): Promise<StudentDocument[]> {
+  startExam(@Query() examDate: StartExamDto) {
     const date = new Date(examDate.examDate);
     if (date.toString() === 'Invalid Date') {
       throw new InvalidDateException();
     }
-    return this.examService.startExamAndPlaceStudents(date);
+    this.examService.startExamAndPlaceStudents(date);
   }
 }
