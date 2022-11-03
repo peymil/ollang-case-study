@@ -45,6 +45,8 @@ export class UniversitiesController {
   @ApiOperation({ description: 'Create universities.' })
   @Post()
   async createUniversities() {
+    //We must delete all other universities as universities in Turkey are constant and we cannot do any upsert/update operation because of placement field.
+    await this.universitiesService.deleteAllUniversities();
     const universities =
       await this.universitiesService.getRealUniversitiesFromAPIAndSort();
     const universitiesInserted = await this.universitiesService.addUniversities(
