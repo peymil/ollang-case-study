@@ -11,9 +11,11 @@ export class WikipediaService {
     return lastValueFrom(
       this.httpService
         .get<PageViewMetricResponse>(
-          `/metrics/pageviews/top/tr.wikipedia/all-access/${date.getFullYear()}/${
+          `/metrics/pageviews/top/tr.wikipedia/all-access/${date.getFullYear()}/${(
             date.getMonth() + 1
-          }/${date.getDate()}`,
+          )
+            .toString()
+            .padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`,
         )
         .pipe(map((response) => response.data.items[0].articles)),
     );
