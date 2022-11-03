@@ -28,7 +28,10 @@ export class UniversitiesService {
       .then((u) => u.students);
   }
 
-  assignStudentsToUniversity(universityId: string, students: StudentDocument[]) {
+  assignStudentsToUniversity(
+    universityId: string,
+    students: StudentDocument[],
+  ) {
     return this.universityModel.findByIdAndUpdate(universityId, {
       students: students,
     });
@@ -48,10 +51,8 @@ export class UniversitiesService {
   async getRealUniversitiesFromAPIAndSort(): Promise<University[]> {
     const universities =
       await this.hipolabsUniversitiesService.getTurkishUniversities();
-    const sortedUniversities = universities.sort(
-      (a, b) =>
-        a.name.split('')[0].toLowerCase().charCodeAt(0) -
-        b.name.split('')[0].toLowerCase().charCodeAt(0),
+    const sortedUniversities = universities.sort((a, b) =>
+      a.name.localeCompare(b.name),
     );
     return sortedUniversities.map((university, n) => {
       const universityToInsert = new University();
